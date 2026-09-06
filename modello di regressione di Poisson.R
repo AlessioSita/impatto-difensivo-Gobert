@@ -1,3 +1,48 @@
+library(hoopR)
+library(dplyr)
+library(stringr)
+library(tidyr)
+library(httr)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+library(patchwork)
+library(sportyR)
+library(ggbasketball)
+library(nnet)
+library(lme4)
+library(MASS)
+library(glmmTMB)
+
+if(!require(devtools)) install.packages("devtools")
+devtools::install_github("ys-xue/ggbasketball")
+library(ggbasketball)
+ggcourt(orientation = "wide")
+
+
+GET(
+  url = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_pbp/play_by_play_2024.rds",
+  write_disk("play_by_play_2024.rds", overwrite = TRUE),
+  timeout(300)  # timeout di 5 minuti
+)
+
+# NBA season (2023-)2024
+schedule <- load_nba_schedule(seasons = 2024)
+
+# WCF DEN-MIN
+den_min <- schedule |> filter(str_detect(notes_headline, "West Semifinals"),
+                              home_abbreviation == "MIN" | home_abbreviation == "DEN") 
+
+# ID delle partite
+id <- den_min |>  select(id) |> pull() |> sort() 
+
+# Play-by-play NBA 2024
+pbp <- readRDS("play_by_play_2024.rds")
+
+# Game 1 to 7
+for(g in 1:7) assign(paste0("game",g), pbp[which(pbp$game_id == id[g]),])
+
+
 #GAME1
 # Sostituzioni
 subs_g1 <- game1 |> 
