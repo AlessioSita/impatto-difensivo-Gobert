@@ -1,5 +1,5 @@
 #GAME1
-# Substitutions
+# Sostituzioni
 subs_g1 <- game1 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -7,13 +7,13 @@ subs_g1 <- game1 |>
 
 subs_g1
 
-# when enters 
+# quando gobert entra 
 enter_g1 <- subs_g1 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g1
 
-# when exits
+# quando gobert esce
 exit_g1 <- subs_g1 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -28,7 +28,7 @@ gobert_intervalli_g1 <- tibble(
 
 gobert_intervalli_g1
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+#TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
 gobert_in_campo_g1 <- function(shot_time) {
   any(gobert_intervalli_g1$enter >= shot_time & gobert_intervalli_g1$exit <= shot_time)
 }
@@ -133,7 +133,6 @@ shots_ga1 <- shots_ga1 |>
 
 #GAME2 
 #GOBERT OUT PER GARA 2
-# Substitutions
 subs_g2 <- game2 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -141,13 +140,13 @@ subs_g2 <- game2 |>
 
 subs_g2
 
-# when enters 
+
 enter_g2 <- game2 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g2
 
-# when exits
+
 exit_g2 <- subs_g2 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -162,7 +161,7 @@ gobert_intervalli_g2 <- tibble(
 
 gobert_intervalli_g2
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+
 gobert_in_campo_g2 <- function(shot_time) {
   any(gobert_intervalli_g2$enter >= shot_time & gobert_intervalli_g2$exit <= shot_time)
 }
@@ -264,7 +263,6 @@ shots_ga2 <- shots_ga2 |>
 
 
 #GAME3
-# Substitutions
 subs_g3 <- game3 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -272,13 +270,13 @@ subs_g3 <- game3 |>
 
 subs_g3
 
-# when enters 
+
 enter_g3 <- subs_g3 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g3
 
-# when exits
+
 exit_g3 <- subs_g3 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -293,7 +291,7 @@ gobert_intervalli_g3 <- tibble(
 
 gobert_intervalli_g3
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+
 gobert_in_campo_g3 <- function(shot_time) {
   any(gobert_intervalli_g3$enter >= shot_time & gobert_intervalli_g3$exit <= shot_time)
 }
@@ -391,7 +389,6 @@ shots_ga3 <- shots_ga3 |>
 
 
 #GAME4
-# Substitutions
 subs_g4 <- game4 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -399,13 +396,13 @@ subs_g4 <- game4 |>
 
 subs_g4
 
-# when enters 
+ 
 enter_g4 <- subs_g4 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g4
 
-# when exits
+
 exit_g4 <- subs_g4 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -518,7 +515,6 @@ shots_ga4 <- shots_ga4 |>
 
 
 #GAME5
-# Substitutions
 subs_g5 <- game5 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -526,13 +522,13 @@ subs_g5 <- game5 |>
 
 subs_g5
 
-# when enters 
+
 enter_g5 <- subs_g5 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g5
 
-# when exits
+
 exit_g5 <- subs_g5 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -547,7 +543,7 @@ gobert_intervalli_g5 <- tibble(
 
 gobert_intervalli_g5
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+
 gobert_in_campo_g5 <- function(shot_time) {
   any(gobert_intervalli_g5$enter >= shot_time & gobert_intervalli_g5$exit <= shot_time)
 }
@@ -649,7 +645,6 @@ shots_ga5 <- shots_ga5 |>
 
 
 #GAME6
-# Substitutions
 subs_g6 <- game6 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -657,13 +652,13 @@ subs_g6 <- game6 |>
 
 subs_g6
 
-# when enters 
+
 enter_g6 <- subs_g6 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g6
 
-# when exits
+
 exit_g6 <- subs_g6 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -678,7 +673,7 @@ gobert_intervalli_g6 <- tibble(
 
 gobert_intervalli_g6
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+
 gobert_in_campo_g6 <- function(shot_time) {
   any(gobert_intervalli_g6$enter >= shot_time & gobert_intervalli_g6$exit <= shot_time)
 }
@@ -774,7 +769,6 @@ shots_ga6 <- shots_ga6 |>
 
 
 #GAME7
-# Substitutions
 subs_g7 <- game7 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -782,13 +776,13 @@ subs_g7 <- game7 |>
 
 subs_g7
 
-# when enters 
+
 enter_g7 <- subs_g7 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g7
 
-# when exits
+
 exit_g7 <- subs_g7 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -803,7 +797,7 @@ gobert_intervalli_g7 <- tibble(
 
 gobert_intervalli_g7
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+
 gobert_in_campo_g7 <- function(shot_time) {
   any(gobert_intervalli_g7$enter >= shot_time & gobert_intervalli_g7$exit <= shot_time)
 }
@@ -947,14 +941,14 @@ shots_serie_tot_poisson$tripla <- ifelse(
 )
 
 #tripla dall'angolo
-shots_filtrati_poisson <- shots_filtrati_poisson %>%
-  mutate(tripla_angolo = ifelse(tripla == TRUE & coordinate_x <= 8.75, TRUE, FALSE))
+#shots_filtrati_poisson <- shots_filtrati_poisson %>%
+#  mutate(tripla_angolo = ifelse(tripla == TRUE & coordinate_x <= 8.75, TRUE, FALSE))
 
 shots_serie_tot_poisson <- shots_serie_tot_poisson %>%
   mutate(midrange = !tripla & !dunk)
 
-shots_filtrati_poisson <- shots_filtrati_poisson %>%
-  mutate(midrange = !tripla & !dunk & !(coordinate_x == 19.00 & coordinate_y == 0))
+#shots_filtrati_poisson <- shots_filtrati_poisson %>%
+#  mutate(midrange = !tripla & !dunk & !(coordinate_x == 19.00 & coordinate_y == 0))
 
 shots_filtrati_poisson <- shots_filtrati_poisson %>%
   mutate(tiro_libero = coordinate_x == 19.00 & coordinate_y == 0)
@@ -1043,7 +1037,7 @@ shots_filtrati_poisson$tipo_tiro[shots_filtrati_poisson$tiro_libero == TRUE] <- 
 
 # Converto in fattore con ordine specifico
 shots_filtrati_poisson$tipo_tiro <- factor(shots_filtrati_poisson$tipo_tiro,
-                                   levels = c("dunk", "midrange", "tripla_angolo", "tripla_non_angolo", "tiro_libero"))
+                                           levels = c("dunk", "midrange", "tripla_angolo", "tripla_non_angolo", "tiro_libero"))
 
 shots_filtrati_poisson <- shots_filtrati_poisson |>
   mutate(
@@ -1056,6 +1050,7 @@ shots_filtrati_poisson <- shots_filtrati_poisson |>
     )
   )
 
+#per salvare i dataset
 save(shots_serie_totale,shots_serie_tot_poisson, shots_filtrati, shots_filtrati_poisson, file = "workspace_Gobert.RData")
 
 

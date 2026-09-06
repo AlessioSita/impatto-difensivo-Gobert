@@ -1,22 +1,16 @@
-rm(list = ls())
-
 library(hoopR)
 library(dplyr)
 library(stringr)
 library(tidyr)
-install.packages("httr")
 library(httr)
 library(dplyr)
 library(stringr)
 library(ggplot2)
-install.packages("patchwork")
 library(patchwork)
-install.packages("devtools")
-install.packages("sportyR")
 library(sportyR)
 library(ggbasketball)
-install.packages("nnet")
 library(nnet)
+library(lme4)
 
 if(!require(devtools)) install.packages("devtools")
 devtools::install_github("ys-xue/ggbasketball")
@@ -30,7 +24,6 @@ GET(
   timeout(300)  # timeout di 5 minuti
 )
 
-
 # NBA season (2023-)2024
 schedule <- load_nba_schedule(seasons = 2024)
 
@@ -38,7 +31,7 @@ schedule <- load_nba_schedule(seasons = 2024)
 den_min <- schedule |> filter(str_detect(notes_headline, "West Semifinals"),
                               home_abbreviation == "MIN" | home_abbreviation == "DEN") 
 
-# Games ID
+# ID delle partite
 id <- den_min |>  select(id) |> pull() |> sort() 
 
 # Play-by-play NBA 2024
@@ -48,7 +41,7 @@ pbp <- readRDS("play_by_play_2024.rds")
 for(g in 1:7) assign(paste0("game",g), pbp[which(pbp$game_id == id[g]),])
 
 #GAME1
-# Substitutions
+# Sostituzioni
 subs_g1 <- game1 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -56,13 +49,13 @@ subs_g1 <- game1 |>
 
 subs_g1
 
-# when enters 
+# gobert entra 
 enter_g1 <- subs_g1 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g1
 
-# when exits
+# gobert esce
 exit_g1 <- subs_g1 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -77,7 +70,7 @@ gobert_intervalli_g1 <- tibble(
 
 gobert_intervalli_g1
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+#TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
 gobert_in_campo_g1 <- function(shot_time) {
   any(gobert_intervalli_g1$enter >= shot_time & gobert_intervalli_g1$exit <= shot_time)
 }
@@ -126,7 +119,6 @@ shots_g1 <- shots_g1 |>
 
 #GAME2 
 #GOBERT OUT PER GARA 2
-# Substitutions
 subs_g2 <- game2 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -134,13 +126,13 @@ subs_g2 <- game2 |>
 
 subs_g2
 
-# when enters 
+ 
 enter_g2 <- game2 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g2
 
-# when exits
+
 exit_g2 <- subs_g2 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -155,7 +147,7 @@ gobert_intervalli_g2 <- tibble(
 
 gobert_intervalli_g2
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+
 gobert_in_campo_g2 <- function(shot_time) {
   any(gobert_intervalli_g2$enter >= shot_time & gobert_intervalli_g2$exit <= shot_time)
 }
@@ -201,7 +193,6 @@ shots_g2 <- shots_g2 |>
 
 
 #GAME3
-# Substitutions
 subs_g3 <- game3 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -209,13 +200,13 @@ subs_g3 <- game3 |>
 
 subs_g3
 
-# when enters 
+
 enter_g3 <- subs_g3 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g3
 
-# when exits
+
 exit_g3 <- subs_g3 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -230,7 +221,7 @@ gobert_intervalli_g3 <- tibble(
 
 gobert_intervalli_g3
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+
 gobert_in_campo_g3 <- function(shot_time) {
   any(gobert_intervalli_g3$enter >= shot_time & gobert_intervalli_g3$exit <= shot_time)
 }
@@ -274,7 +265,6 @@ shots_g3 <- shots_g3 |>
 
 
 #GAME4
-# Substitutions
 subs_g4 <- game4 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -282,13 +272,13 @@ subs_g4 <- game4 |>
 
 subs_g4
 
-# when enters 
+
 enter_g4 <- subs_g4 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g4
 
-# when exits
+
 exit_g4 <- subs_g4 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -303,7 +293,7 @@ gobert_intervalli_g4 <- tibble(
 
 gobert_intervalli_g4
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+
 gobert_in_campo_g4 <- function(shot_time) {
   any(gobert_intervalli_g4$enter >= shot_time & gobert_intervalli_g4$exit <= shot_time)
 }
@@ -349,7 +339,6 @@ shots_g4 <- shots_g4 |>
 
 
 #GAME5
-# Substitutions
 subs_g5 <- game5 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -357,13 +346,13 @@ subs_g5 <- game5 |>
 
 subs_g5
 
-# when enters 
+
 enter_g5 <- subs_g5 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g5
 
-# when exits
+
 exit_g5 <- subs_g5 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -378,7 +367,7 @@ gobert_intervalli_g5 <- tibble(
 
 gobert_intervalli_g5
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+
 gobert_in_campo_g5 <- function(shot_time) {
   any(gobert_intervalli_g5$enter >= shot_time & gobert_intervalli_g5$exit <= shot_time)
 }
@@ -426,7 +415,6 @@ shots_g5 <- shots_g5 |>
 
 
 #GAME6
-# Substitutions
 subs_g6 <- game6 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -434,13 +422,13 @@ subs_g6 <- game6 |>
 
 subs_g6
 
-# when enters 
+
 enter_g6 <- subs_g6 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g6
 
-# when exits
+
 exit_g6 <- subs_g6 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -455,7 +443,7 @@ gobert_intervalli_g6 <- tibble(
 
 gobert_intervalli_g6
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+
 gobert_in_campo_g6 <- function(shot_time) {
   any(gobert_intervalli_g6$enter >= shot_time & gobert_intervalli_g6$exit <= shot_time)
 }
@@ -500,7 +488,6 @@ shots_g6 <- shots_g6 |>
 
 
 #GAME7
-# Substitutions
 subs_g7 <- game7 |> 
   filter(str_detect(type_text, "Substitution")) |> 
   filter(str_detect(text, "Rudy Gobert")) |> 
@@ -508,13 +495,13 @@ subs_g7 <- game7 |>
 
 subs_g7
 
-# when enters 
+
 enter_g7 <- subs_g7 |>  
   filter(str_detect(text, "Rudy Gobert enters"))
 
 enter_g7
 
-# when exits
+
 exit_g7 <- subs_g7 |> 
   filter(str_detect(text, "for Rudy Gobert")) 
 
@@ -529,7 +516,7 @@ gobert_intervalli_g7 <- tibble(
 
 gobert_intervalli_g7
 
-# Funzione: restituisce TRUE se il tempo del tiro è dentro un intervallo in cui Gobert era in campo
+
 gobert_in_campo_g7 <- function(shot_time) {
   any(gobert_intervalli_g7$enter >= shot_time & gobert_intervalli_g7$exit <= shot_time)
 }
@@ -597,6 +584,13 @@ shots_serie_totale_half <- shots_serie_totale %>%
   filter(coordinate_x <= 47)  # solo metà campo offensiva
 
 plot_gobert <- shots_serie_totale_half %>%
+  mutate(
+    gobert_status = ifelse(
+      gobert_on_court == TRUE,
+      "Gobert in campo",
+      "Gobert in panchina"
+    )
+  ) %>%
   ggshotchart(
     x = "coordinate_x",
     y = "coordinate_y",
@@ -605,17 +599,25 @@ plot_gobert <- shots_serie_totale_half %>%
   scale_color_manual(
     name = "Esito",
     values = c("FALSE" = "#D32F2F", "TRUE" = "#388E3C"),
-    labels = c("FALSE" = "Tiro sbagliato", "TRUE" = "Tiro segnato")
+    labels = c(
+      "FALSE" = "Tiro sbagliato",
+      "TRUE" = "Tiro segnato"
+    )
   ) +
   scale_shape_manual(
     name = "Esito",
     values = c("FALSE" = 16, "TRUE" = 17),
-    labels = c("FALSE" = "Tiro sbagliato", "TRUE" = "Tiro segnato")
+    labels = c(
+      "FALSE" = "Tiro sbagliato",
+      "TRUE" = "Tiro segnato"
+    )
   ) +
-  ggtitle("Tiri tentati da Denver nella serie contro Minnesota") +
+  ggtitle("Tiri tentati da Denver nella serie contro Minnesota del 2024") +
   facet_wrap(~gobert_status) +
-  theme(plot.title = element_text(hjust = 0.5))+
-  coord_flip()  # ruota di 90 gradi
+  theme(
+    plot.title = element_text(hjust = 0.5)
+  ) +
+  coord_flip()
 
 plot_gobert
 
@@ -624,7 +626,6 @@ plot_gobert
 #distanza euclidea
 shots_serie_totale$distanza_canestro <- sqrt((shots_serie_totale$coordinate_x-4)^2 + shots_serie_totale$coordinate_y^2)
 
-#istogrammi sul file appunti
 
 shots_filtrati <- shots_serie_totale %>%
   filter(!is.na(distanza_canestro),
@@ -644,7 +645,8 @@ sort(shots_filtrati$distanza_canestro)
 hist_gobert <- ggplot(shots_filtrati, aes(x = distanza_canestro, fill = gobert_on_court)) +
   geom_histogram(aes(y = ..density..), binwidth = 1, alpha = 0.5, position = "identity", color = "white") +
   labs(title = "Distribuzione delle distanze di tiro con e senza Gobert in campo",
-       x = "Distanza dal canestro",
+       subtitle = "SERIE PLAYOFF 2024",
+       x = "Distanza dal canestro (in piedi)",
        y = "Frequenza",
        fill = "") +
   scale_fill_manual(values = c("TRUE" = "#1976D2", "FALSE" = "#D32F2F"),
@@ -656,13 +658,11 @@ hist_gobert
 
 hist_gobert +
   theme_minimal() +
+  theme(legend.position = "bottom") +
   theme(
     panel.grid.major = element_blank(),  # griglie principali
     panel.grid.minor = element_blank()   # griglie secondarie
   )
-
-ggsave("hist_gobert.png", hist_gobert, width = 8, height = 6, dpi = 300)
-getwd()
 
 #creazione variabile midrange
 
@@ -704,7 +704,7 @@ shots_serie_totale <- shots_serie_totale %>%
 
 levels(shots_serie_totale$shooter)
 
-#vvariabile binomiale -> true se tiratori sono jokic o murray
+#vvariabile binomiale -> TRUE se tiratori sono jokic o murray
 shots_serie_totale$shooter_bin <- shots_serie_totale$shooter %in% c("Nikola Jokic", "Jamal Murray")
 
 #variabile shooter a 3 livelli
@@ -758,7 +758,6 @@ shots_filtrati <- shots_filtrati |>
   mutate(seconds = 2880 - end_game_seconds_remaining)
 
 
-library("lme4")
 #random effects -> mod di partenza
 mod_random_effects <- glmer(midrange ~ gobert_on_court +poly(seconds, 5)+ home_game
                 + poly(scarto, 5) + gobert_on_court:home_game + (1|origine), 
@@ -782,15 +781,15 @@ summary(mod_finale)
 
 mod_finale$coefficients
 attach(shots_filtrati)
-#plot(sort(end_game_seconds_remaining), sum(mod8$coefficients[1:2])+ 
- #      (mod8$coefficients[3] +  mod8$coefficients[5]) * sort(end_game_seconds_remaining) +
-  #     (mod8$coefficients[4] +  mod8$coefficients[6]) * sort(end_game_seconds_remaining^2), type="l" )
 
+
+## PROBABILITA' TIRO DAL MIDRANGE##
+#
 #gobert off, home_game false
 logit1 = (mod_finale$coefficients[1])+ 
   (mod_finale$coefficients[3]) * poly(seconds, 2)[order(seconds),1] +
   (mod_finale$coefficients[4]) * poly(seconds, 2)[order(seconds),2]
-##
+
 plot(sort(seconds),exp(logit1)/(1+exp(logit1)), type="l" )
 
 #gobert on, home_game false
@@ -799,12 +798,14 @@ logit2 = sum(mod_finale$coefficients[1:2])+
   (mod_finale$coefficients[4]) * poly(seconds, 2)[order(seconds),2]
 
 plot(sort(seconds),exp(logit2)/(1+exp(logit2)), type="l" )
+
 #gobert off, home_game true
 logit3 = sum(mod_finale$coefficients[c(1,5)])+ 
   (mod_finale$coefficients[3]) * poly(seconds, 2)[order(seconds),1] +
   (mod_finale$coefficients[4]) * poly(seconds, 2)[order(seconds),2]
 
 plot(sort(seconds),exp(logit3)/(1+exp(logit3)), type="l" )
+
 #gobert on, home_game true
 logit4 = sum(mod_finale$coefficients[c(1, 2, 5)]) + 
   mod_finale$coefficients[3] * poly(seconds, 2)[order(seconds),1] +
@@ -852,7 +853,7 @@ ggplot(grafico_prob, aes(x = seconds/60, y = prob,
   labs(
     x = "Minuti dall'inizio della partita",
     y = "Probabilità (%)",
-    title = "Probabilità di tiro dal midrange",
+    title = "Probabilità di tiro dal midrange, serie playoff 2024",
     subtitle = "Analisi in base a presenza in campo di Gobert e sede della partita",
     color = "Squadra in casa", 
     linetype = "Presenza di Gobert"
@@ -860,25 +861,7 @@ ggplot(grafico_prob, aes(x = seconds/60, y = prob,
   geom_vline(xintercept = c(12, 24, 36, 48), linetype = "dotted", color = "gray50")
 
 
-#valutazione coefficienti
-#intercetta
-exp(-0.7684)
-#0.4637
-exp(-0.7684)/(1+exp(-0.7684))
-#probabilità -> 31,67%
-#gob on court true
-1.41*0.4637
-#0.6538
-0.6538/(1+0.6538)
-#0.3953
-exp(-0.3162)
-0.7289*0.4637
-#0.338
-0.338/(1+0.338)
-#0,2526
-step(mod_finale, scope = list(lower = mod_min, upper= mod8b), direction = "forward") |> summary()
 
-1- (658.93/670.95)
 
 
 
